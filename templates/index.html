@@ -47,7 +47,7 @@
             color: #e0e0e0;
         }
 
-        input[type="file"] {
+        input[type="file"], select {
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #333;
@@ -87,6 +87,12 @@
     <div class="container">
         <h1>Music Genre Classifier</h1>
         <form id="uploadForm">
+            <label for="modelSelect">Select Model:</label>
+            <select id="modelSelect">
+                <option value="predict_gru">GRU Model</option>
+                <option value="predict_vanilla">Vanilla Model</option>
+            </select>
+
             <label for="audioFile">Upload a .wav file:</label>
             <input type="file" id="audioFile" accept=".wav" required>
             <button type="submit">Predict Genre</button>
@@ -99,11 +105,12 @@
             event.preventDefault();
 
             const fileInput = document.getElementById("audioFile");
+            const modelSelect = document.getElementById("modelSelect").value;
             const formData = new FormData();
             formData.append("file", fileInput.files[0]);
 
             try {
-                const response = await fetch("http://127.0.0.1:5000/predict", {
+                const response = await fetch(`http://127.0.0.1:5000/${modelSelect}`, {
                     method: "POST",
                     body: formData
                 });
