@@ -14,7 +14,7 @@ def load_model(model_name):
     return joblib.load(model_file)
 
 def test_models(X_test, y_test, genres):
-    model_types = ['vanilla']
+    model_types = ['gru']
 
     for model_type in model_types:
         print(f"\nTesting {model_type.upper()} model on 20 samples...")
