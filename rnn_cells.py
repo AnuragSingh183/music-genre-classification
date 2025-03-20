@@ -335,10 +335,25 @@ class RNNModel:
 
         return losses, accuracies
 
-
     def predict(self, X):
         if hasattr(self.rnn_cell, 'reset_memory'):
             self.rnn_cell.reset_memory()
 
         probs = self.forward(X)
         return np.argmax(probs, axis=0)
+    
+    def predict_with_confidence(self, X):
+        """Predict genre with confidence score."""
+        if hasattr(self.rnn_cell, 'reset_memory'):
+            self.rnn_cell.reset_memory()
+
+        # Get probabilities from forward pass
+        probs = self.forward(X)
+
+        # Predicted class index
+        predicted_index = np.argmax(probs, axis=0)
+
+        # Confidence (probability) of the predicted class
+        confidence = np.max(probs, axis=0)
+
+        return predicted_index, confidence

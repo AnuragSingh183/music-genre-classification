@@ -9,6 +9,7 @@ from rnn_cells import RNNModel
 # File paths for saved features
 FEATURES_FILE = 'processed_features.npy'
 LABELS_FILE = 'processed_labels.npy'
+FILENAMES_FILE = 'file_names.npy'
 
 # Directory to save models
 MODEL_DIR = 'saved_models'
@@ -53,9 +54,10 @@ def train_model(model_type):
     # Load preprocessed dataset
     print("Loading and preprocessing dataset...")
     if not (os.path.exists(FEATURES_FILE) and os.path.exists(LABELS_FILE)):
-        X, y = load_dataset(data_dir, genres)
+        X, y, filenames = load_dataset(data_dir, genres)
         np.save(FEATURES_FILE, X.astype(np.float32))  # Convert to float32 for memory efficiency
         np.save(LABELS_FILE, y)
+        np.save(FILENAMES_FILE, np.array(filenames))
     else:
         print("Loading saved features...")
         X = np.load(FEATURES_FILE).astype(np.float32)

@@ -95,6 +95,7 @@ def extract_features(file_path, max_len=260):
 
 FEATURES_FILE = 'processed_features.npy'
 LABELS_FILE = 'processed_labels.npy'
+FILENAMES_FILE = 'file_names.npy'
 
 def load_dataset(data_dir, genres, max_samples_per_genre=100):
     """Load dataset from directory structure."""
@@ -102,11 +103,13 @@ def load_dataset(data_dir, genres, max_samples_per_genre=100):
         print("Loading preprocessed features...")
         X = np.load(FEATURES_FILE)
         y = np.load(LABELS_FILE)
-        return X, y
+        filenames = np.load(FILENAMES_FILE)
+        return X, y, filenames
 
     print("Extracting and saving features...")
     X = []
     y = []
+    filenames = [] 
     
     for i, genre in enumerate(genres):
         genre_dir = os.path.join(data_dir, genre)
@@ -128,7 +131,10 @@ def load_dataset(data_dir, genres, max_samples_per_genre=100):
                     for feature in features:  # Handle augmented data
                         X.append(feature)
                         y.append(i)
+                        filenames.append(audio_file)
                     count += 1
+    
+    print(filenames[:2])
 
     # Convert to numpy array and reshape to 3D (samples, time_steps, features)
     X = np.array(X)
@@ -138,5 +144,6 @@ def load_dataset(data_dir, genres, max_samples_per_genre=100):
     # Save processed data
     np.save(FEATURES_FILE, X)
     np.save(LABELS_FILE, np.array(y))
+    np.save(FILENAMES_FILE, np.array(filenames))
 
-    return X, np.array(y)
+    return X, np.array(y), np.array(filenames)

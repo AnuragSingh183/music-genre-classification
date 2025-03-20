@@ -1,6 +1,19 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
+def train_test_split_with_filenames(X, y, filenames, test_size=0.2, random_state=42):
+    """Split data into training and testing sets, including filenames."""
+    np.random.seed(random_state)
+    indices = np.random.permutation(len(X))
+    test_count = int(len(X) * test_size)
+    test_indices = indices[:test_count]
+    train_indices = indices[test_count:]
+    
+    X_train, X_test = X[train_indices], X[test_indices]
+    y_train, y_test = y[train_indices], y[test_indices]
+    filenames_train, filenames_test = filenames[train_indices], filenames[test_indices]
+    
+    return X_train, X_test, y_train, y_test, filenames_train, filenames_test
 
 def train_test_split(X, y, test_size=0.2, random_state=42):
     """Split data into training and testing sets."""
